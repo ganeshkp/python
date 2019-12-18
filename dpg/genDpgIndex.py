@@ -5,11 +5,13 @@ Created By: Ganeshkumar patil
 
 Description: Generates graph for selected item from tree view.
 
-Usage: Call genDpgIndex.exe -f LOGFILE.log
+Usage: On command line: genDpgIndex.exe -f LOGFILE.log
 
+pre-requisite:
+    common folder with content should be available in current directory
 """
 
-import itertools, os
+import itertools, os, sys
 SKIP_JUNK_DATA=0
 
 import sys, json
@@ -168,7 +170,7 @@ indexFileContent="""<!-- <!DOCTYPE html> -->
 def parseArgs(args):
     if "-h" in args:
         print(__doc__)
-        exit(0)
+        sys.exit(0)
     if "-f" in args:
         # Get the index of the option
         index = args.index("-f")

@@ -3,7 +3,7 @@
 """
 Created By: Ganeshkumar patil
 
-Description: Generates graph for selected item from tree view.
+Description: Reads REST log file and generates graph for selected item from tree view.
 
 Usage: On command line: genDpgIndex.exe -f LOGFILE.log
 

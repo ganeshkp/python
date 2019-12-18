@@ -5,6 +5,8 @@ Created By: Ganeshkumar patil
 
 Description: Generates graph for selected item from tree view.
 
+Usage: Call genDpgIndex.exe -f LOGFILE.log
+
 """
 
 import itertools, os

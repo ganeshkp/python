@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Created By: Ganeshkumar patil
-Date: 23-Oct-2019
-Description: This file reads APEX log file and provides filtered signal with full path.
-Ex. Call getPathList() with first parameter with signal name and remaining as filtering parameters
-    like apex path node name. You can specify any number of filtering parameters for this function.
+
+Description: Generates graph for selected item from tree view.
+
 """
 
 import itertools, os

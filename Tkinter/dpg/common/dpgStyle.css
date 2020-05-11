@@ -1,0 +1,52 @@
+
+.header_comment{
+	font-family:Tahoma;
+	font-weight:bold;
+	font-size:20px;
+	margin:5px 4px 5px 4px;
+    color:#772828;
+/*    text-align: center;*/
+}
+
+p{
+    font-family:Tahoma;
+    font-size:15px;
+    margin:8px 8px 8px 8px;
+    color:#cc6600;
+}
+
+.myhover{
+    background: #ACE9BD;
+}
+
+#innerPage{
+    background-color: white;
+}
+
+.tableHeader{
+    text-align: center;
+}
+
+.app_label{
+    font-size:20px;
+}
+
+#GRAPH_LOCATION, #GRAPH_LOCATION1, #GRAPH_LOCATION2{
+    height: 100vh;
+    width: 97vw;
+}
+
+.webix_item_tab.webix_selected{
+  background-color:black;
+  color: white;
+}
+
+.webix_hcell{
+    text-align: center;
+}
+
+.webix_cell {
+    text-align:center;
+    /*color: red;*/
+}
+

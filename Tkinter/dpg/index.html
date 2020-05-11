@@ -1,0 +1,113 @@
+<!-- <!DOCTYPE html> -->
+<head>
+    <title>Datapoint Graph</title>
+    <!--LINK WEBIX -->
+    <script type="text/javascript" src="common/webix.js?v=6.4.5"></script>
+    <link rel="stylesheet" type="text/css" href="common/webix.css?v=6.4.5">
+    <!-- LINK DPG FILES -->
+    <link rel="stylesheet" type="text/css" href="common/dpgStyle.css">
+    <script src='dpg.js'></script>
+    <!-- LINK PLOTLY -->
+    <script src='common/plotly-latest.min.js'></script>
+</head>
+<body>
+    <div id="TREE_LOCATION" style="height:95vh;"></div>
+    <div id="GRAPH_LOCATION"></div>
+
+    <script type="text/javascript" charset="utf-8">    
+
+        webix.ready(function(){
+             //loading from file
+            webix.ui({
+                    type:"space",
+                    margin:2,
+                    padding:0,
+                    autowidth:false,
+                    container:"TREE_LOCATION",
+                    rows:[
+                        {
+                            view:"toolbar", 
+                            height: 50,
+                            cols:[
+                                // { gravity:5 },
+                                {template:"<div class='header_comment'>Data Point Graph</div>"},
+                            ]
+                        },
+                            
+                        {view:"resizer"},
+                        {
+                            cols:[
+                            {
+                                view:"tree",
+                                width:400,
+                                drag:"source",
+                                select:true,
+                                url:function(params){
+                                    return getTreeData();
+                                },
+                                // data:treeData,
+                                on: {
+                                    onBeforeDrag: function(context) {
+                                      let id = context.start;
+                                      const path = [id];
+                                      
+                                      while (id = this.getParentId(id)){
+                                        path.unshift(id);
+                                      }
+                                 
+                                      let fullPath = path.map((id) => {
+                                        return this.getItem(id).value;
+                                      }).join("/");
+                                 
+                                      //webix.message(`Full path: ${fullPath}`);
+                                      context.path = fullPath;
+                                    }
+                                }
+                            },
+                            {view:"resizer"},
+                            {
+                                view:"template",
+                                autoheight:true,
+                                id:"plotPage",
+                                content:"GRAPH_LOCATION",
+                            }]
+                    }]
+            });
+            webix.DragControl.addDrop("GRAPH_LOCATION", {
+                $drop:function(source, target, event){
+                    var dnd = webix.DragControl.getContext();
+                    path="/"+dnd.path;
+                    
+                    basename=path.split("/").pop();
+                    var isPltExists=false;
+                    for (var i=0; i<plotDataList.length; i++){
+                        if (plotDataList[i].signal==basename){
+                            isPltExists=true;
+                            webix.message("Signal already exists");
+                            break
+                        }
+                    }
+
+                    if (isPltExists == false){
+                        sigData={};
+                        sigData["signal"]=basename;
+                        monId=monIdPathMap[path];
+                        
+                        sigData["yData"]=monIdData[monId];
+                        length=monIdData[monId].length;
+                        sigData["xData"]=range(length);
+                        plotDataList.push(sigData);
+
+                        //PLOT GRAPH
+                        var values=plotGraph(plotDataList);
+                        data=values[0];
+                        layout=values[1];
+                        Plotly.newPlot('GRAPH_LOCATION', data, layout);
+                    }
+                }
+            })
+        });
+    </script>
+</body>
+</html>
+

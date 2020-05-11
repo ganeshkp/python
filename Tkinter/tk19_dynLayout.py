@@ -14,7 +14,7 @@ class App(tk.Tk):
         self.submit.grid(row=len(fields), column=1, sticky=tk.E, padx=10, pady=10)
     def print_info(self):
         for label, entry in self.widgets:
-            print("{} = {}".format(label.cget("text"), "=", entry.get()))
+            print("{} = {}".format(label.cget("text"), entry.get()))
 
 if __name__ == "__main__":
     app = App()

@@ -17,7 +17,7 @@ def getIndiaLayout():
         html.Div(children=[
             html.Div(children=[
                 html.Label("Status Information")
-            ], style={"backgroundColor":"blue", "color":"white"}),
+            ], style={"backgroundColor":"blue", "color":"white", "textAlign":"center"}),
 
             html.Div(id="topTable", children=[
                 getIndiaTopTable()
@@ -28,7 +28,7 @@ def getIndiaLayout():
         html.Div(children=[
             html.Div(children=[
                html.Label("Hospital Beds Information")
-            ], style={"backgroundColor":"blue", "color":"white"}),
+            ], style={"backgroundColor":"blue", "color":"white", "textAlign":"center"}),
 
             html.Div(id="oHospInfo", children=[
                 getIndiaHospInfo()
@@ -38,24 +38,24 @@ def getIndiaLayout():
         html.Div(children=[
             dcc.Graph(id="icmrChart1",
                       figure=getTotSamplesFigure())
-        ], style={"width":"49%", "margin":"6px", "display":"inline-block"}),
+        ], style={"width":"33%", "margin":"2px", "display":"inline-block"}),
 
         html.Div(children=[
             dcc.Graph(id="icmrChart2",
                       figure=getTotIndFigure())
-        ], style={"width": "49%", "margin": "6px", "display":"inline-block"}),
+        ], style={"width": "33%", "margin": "2px", "display":"inline-block"}),
 
         html.Div(children=[
             dcc.Graph(id="icmrChart3",
                       figure=getPosCasesFigure())
-        ], style={"width": "49%", "margin": "6px", "display":"inline-block"}),
+        ], style={"width": "33%", "margin": "2px", "display":"inline-block"}),
 
 
         html.Div(id="oInfectionTrendDiv", children=[
             dcc.Graph(id="oInfectionTrendGraph",
                       figure=getAffectedVsPopulation())
         ],
-        style={"width":"95%", "display":"inline-block", "margin":"10px"}),
+        style={"width":"95%", "display":"inline-block", "margin":"25px"}),
 
     ])
     return layout
@@ -235,7 +235,7 @@ def getStateLayout():
 
     layout=html.Div(children=[
         html.Div(children=[
-            html.Label("Select State", style={"color":"white"}),
+            html.Label("Select State", style={"color":"white", "textAlign":"center"}),
             dcc.Dropdown(id="states-dropdown",
                          options=options,
                          value="Karnataka")
@@ -247,45 +247,76 @@ def getStateLayout():
         # ], style={"width":"49%", "display":"inline-block"}),
 
         html.Div(children=[
-            html.Label("Infection Information", style={"backgroundColor":"blue", "color":"white"}),
+            html.Label("Infection Information", style={"backgroundColor":"blue", "color":"white", "textAlign":"center"}),
             html.Div(id="infection-table")
         ], style={"width":"45%", "display":"inline-block", "margin":"15px", "backgroundColor":"white"}),
 
         html.Div(children=[
-            html.Label("Hospital Bed Information", style={"backgroundColor":"blue", "color":"white"}),
+            html.Label("Hospital Bed Information", style={"backgroundColor":"blue", "color":"white",
+                                                          "textAlign":"center"}),
             html.Div(id="state-hospital-bed-information")
-        ], style={"margin":"10px", "backgroundColor":"white"}),
+        ], style={"margin":"20px", "backgroundColor":"white"}),
 
         #Infection trend
         html.Div(children=[
             dcc.Graph(id="infection-trend")
-        ], style={"width":"48%", "display":"inline-block", "margin":"10px"}),
+        ], style={"width":"48%", "display":"inline-block", "margin":"15px"}),
 
         #Statewide testing details/Total Samples
         html.Div(children=[
             dcc.Graph(id="state-total-samples-tested")
-        ], style={"width":"48%", "display":"inline-block", "margin":"10px"}),
+        ], style={"width":"48%", "display":"inline-block", "margin":"15px"}),
 
         # Statewide testing details/Negative
         html.Div(children=[
             dcc.Graph(id="state-total-negative")
-        ], style={"width": "48%", "display": "inline-block", "margin": "10px"}),
+        ], style={"width": "48%", "display": "inline-block", "margin": "15px"}),
 
         # Statewide testing details/Positive
         html.Div(children=[
             dcc.Graph(id="state-total-positive")
-        ], style={"width": "48%", "display": "inline-block", "margin": "10px"}),
+        ], style={"width": "48%", "display": "inline-block", "margin": "15px"}),
 
         html.Div(children=[
             html.Label("Affected Individual Details in the state",
-                       style={"backgroundColor":"gray", "textAlign":"center",
-                              "fontWeight":"bold", "color":"white"}),
-            html.Div(id="state-individual-details")
-        ], style={"width": "98%", "display": "inline-block", "margin": "5px"})
+                       style={"backgroundColor":"blue", "textAlign":"center",
+                              "fontWeight":"bold", "color":"white", "textAlign":"center"}),
+            html.Div(id="state-individual-details", style={"height": "500px", "overflow": "auto"})
+        ], style={"width": "98%", "display": "inline-block", "margin": "10px"}),
+
+        html.Div(children=[
+            html.Label("ICMR Testing Labs",
+                       style={"backgroundColor": "blue", "textAlign": "center",
+                              "fontWeight": "bold", "color": "white"}),
+            html.Div(id="icmr-testing-labs", style={"height": "500px", "overflow": "auto"})
+        ], style={"width": "98%", "display": "inline-block", "margin": "10px"}),
 
     ])
     return layout
 
+
+@app.callback(Output("icmr-testing-labs", "children"),
+              [Input("states-dropdown", "value")])
+def getIcmrTestingLabs(state):
+    try:
+        icmrTemp=pd.read_csv("./inputs/ICMRTestingLabs.csv")
+        icmr=icmrTemp[icmrTemp["state"]==state]
+        icmr.drop("state", axis=1, inplace=True)
+
+        return table.DataTable(id="icmrDetails",
+                        columns=[{"name": i, "id": i} for i in icmr.columns],
+                        data=icmr.to_dict("records"),
+                        style_cell={"textAlign": "left", "font_family": "verdana", "font_size": "12px",
+                                    "whiteSpace": "normal"},
+                        style_header={"backgroundColor": "blue", "color": "white", "fontWeight": "bold",
+                                      "font_size": "12px",
+                                      "whiteSpace": "normal", "textAlign": "center"},
+                        # fixed_rows={"headers":True},
+                        css=[{'selector': '.dash-cell div.dash-cell-value',
+                              'rule': 'display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;'}],
+                        )
+    except:
+        return table.DataTable()
 
 @app.callback(Output("state-individual-details", "children"),
               [Input("states-dropdown", "value")])
@@ -302,11 +333,12 @@ def getStatesIndInfo(state):
                             style_cell={"textAlign":"left", "font_family":"verdana", "font_size":"12px", "whiteSpace":"normal"},
                             style_header={"backgroundColor":"blue", "color":"white", "fontWeight":"bold","font_size":"12px",
                                           "whiteSpace": "normal", "textAlign":"center"},
+                            #fixed_rows={"headers":True},
                             css=[{'selector': '.dash-cell div.dash-cell-value',
                                  'rule': 'display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;'}],
                             )
     except:
-        table.DataTable()
+        return table.DataTable()
 
 @app.callback(Output("state-total-samples-tested", "figure"),
               [Input("states-dropdown", "value")])
@@ -545,7 +577,8 @@ app.layout=html.Div([
     html.Div(children=[
         html.H2("Covid-19 India Dashboard")
     ],
-    style={"textAlign":"center", "color":"blue", "padding":"2px", "fontWeight":"bold"}),
+    style={"textAlign":"center", "color":"white", "padding":"2px", "fontWeight":"bold",
+           "backgroundColor":"#a158d6"}),
 
     html.Div(id="body", children=[
         dcc.Tabs(id="mainTabs",

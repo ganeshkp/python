@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/12319796/dynamically-add-create-subplots-in-matplotlib
+
+https://pythonquestion.com/post/dynamically-add-subplots-in-matplotlib-with-more-than-one-column/
+
+https://stackoverflow.com/questions/12052379/matplotlib-draw-a-selection-area-in-the-shape-of-a-rectangle-with-the-mouse

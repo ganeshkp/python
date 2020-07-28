@@ -1,0 +1,13 @@
+2020-07-25 19:03:33,780 - INFO - Python 3.6.8 (tags/v3.6.8:3c6b436a57, Dec 24 2018, 00:16:47) [MSC v.1916 64 bit (AMD64)]
+2020-07-25 19:03:33,783 - INFO - Platform Windows-10-10.0.18362-SP0
+2020-07-25 19:03:33,783 - INFO - data url: https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
+2020-07-25 19:03:33,784 - INFO - image resolution: 1024x768 pixel
+2020-07-25 19:03:33,784 - INFO - country filter: ('Germany',)
+2020-07-25 19:03:33,784 - INFO - image format: ('png',)
+2020-07-25 19:03:33,784 - INFO - show viewer: True
+2020-07-25 19:03:33,784 - INFO - initial cases: 0
+2020-07-25 19:03:33,785 - INFO - use cache: False
+2020-07-25 19:03:33,785 - INFO - cache file: C:\WORK\VM_SHARE\MyREPO\python\Tkinter\covid19.csv
+2020-07-25 19:03:33,785 - INFO - transparency: 0.8
+2020-07-25 19:03:33,786 - INFO - Downloading from https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
+2020-07-25 19:03:46,995 - INFO - Generating covid19-germany.png

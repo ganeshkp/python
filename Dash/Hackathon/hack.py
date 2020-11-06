@@ -7,10 +7,6 @@ from dash.dependencies import Input, Output
 import dash_table as table
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
 def getIndiaLayout():
     layout=html.Div(children=[
 
@@ -294,6 +290,8 @@ def getStateLayout():
     ])
     return layout
 
+app = dash.Dash()
+server=app.server
 
 @app.callback(Output("icmr-testing-labs", "children"),
               [Input("states-dropdown", "value")])
@@ -606,6 +604,6 @@ app.layout=html.Div([
 ],
 style={"backgroundColor":"#6699ff"})
 
-
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=5001)
+	

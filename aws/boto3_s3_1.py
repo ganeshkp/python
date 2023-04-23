@@ -132,6 +132,27 @@ def create_presigned_post(bucket_name, object_name,
     # The response contains the presigned URL and required fields
     return response
 
+def get_bucket_cors(bucket_name):
+    """Retrieve the CORS configuration rules of an Amazon S3 bucket
+
+    :param bucket_name: string
+    :return: List of the bucket's CORS configuration rules. If no CORS
+    configuration exists, return empty list. If error, return None.
+    """
+
+    # Retrieve the CORS configuration
+    s3 = boto3.client('s3')
+    try:
+        response = s3.get_bucket_cors(Bucket=bucket_name)
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchCORSConfiguration':
+            return []
+        else:
+            # AllAccessDisabled error == bucket not found
+            logging.error(e)
+            return None
+    return response['CORSRules']
+
 #=====================================MAIN PROGRAM======================================
 
 # Create a s3 client
@@ -168,20 +189,58 @@ for bucket in response['Buckets']:
 #-------------------------------------------------------------
 #Upload file into s3 using presigned url
 # Generate a presigned S3 POST URL
-object_name = 'alexa1.jpg'
-response = create_presigned_post('my-first0bucket', object_name)
-if response is None:
-    exit(1)
+# object_name = 'alexa1.jpg'
+# response = create_presigned_post('my-first0bucket', object_name)
+# if response is None:
+#     exit(1)
 
-file_name = './aws/alexa1.jpg'
-# Demonstrate how another Python program can use the presigned URL to upload a file
-with open(file_name, 'rb') as f:
-    files = {'file': (file_name, f)}
-    http_response = requests.post(response['url'], data=response['fields'], files=files)
-# If successful, returns HTTP status code 204
-logging.info(f'File upload HTTP status code: {http_response.status_code}')
+# file_name = './aws/alexa1.jpg'
+# # Demonstrate how another Python program can use the presigned URL to upload a file
+# with open(file_name, 'rb') as f:
+#     files = {'file': (file_name, f)}
+#     http_response = requests.post(response['url'], data=response['fields'], files=files)
+# # If successful, returns HTTP status code 204
+# logging.info(f'File upload HTTP status code: {http_response.status_code}')
+#------------------------------------------------------------------------
+#Set a bucket policy
+# import json
 
+# # Create a bucket policy
+# bucket_name = 'my-first0bucket'
+# bucket_policy = {
+#     'Version': '2012-10-17',
+#     'Statement': [{
+#         'Sid': 'AddPerm',
+#         'Effect': 'Allow',
+#         'Principal': '*',
+#         'Action': [
+#                 "s3:PutObject",
+#                 "s3:GetObject",
+#                 "s3:PutObjectAcl",
+#                 "s3:GetObjectAcl"
+#             ],
+#         'Resource': f'arn:aws:s3:::{bucket_name}/*'
+#     }]
+# }
 
+# # Convert the policy from JSON dict to string
+# bucket_policy = json.dumps(bucket_policy)
+
+# # Set the new policy
+# s3 = boto3.client('s3')
+# s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)
+# #----------------------------------------------------------------------
+# #Retrieve bucket policy
+# result = s3.get_bucket_policy(Bucket='my-first0bucket')
+# print(result['Policy'])
+#-------------------------------------------------------------------
+#Delete bucket policy
+# s3.delete_bucket_policy(Bucket='my-first0bucket')
+
+#--------------------------------------------------------------
+# Get a bucket access control list
+result = s3.get_bucket_acl(Bucket='my-first0bucket')
+print(result)
 
 #------------------------------------------------------------------
 print("END")

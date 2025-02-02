@@ -1,0 +1,16 @@
+02-Feb-2025:
+em1:
+Predicted main numbers: [35, 50, 47, 33, 41]
+Predicted lucky star numbers: [7, 2]
+
+em2:
+Predicted main numbers: [40, 47, 48, 46, 49]
+Predicted lucky star numbers: [12, 2]
+
+em3:
+Predicted main numbers: [15, 5, 25, 9, 50]
+Predicted lucky star numbers: [6, 12]
+
+em4:
+Predicted Balls (1-50): [7, 8, 34, 42, 47]
+Predicted Lucky Stars (1-12): [4, 6]

@@ -13,23 +13,17 @@ data = data.iloc[::-1].reset_index(drop=True)
 main_numbers = data.iloc[:, 1:6].values.flatten()
 lucky_stars = data.iloc[:, 6:8].values.flatten()
 
-# Count occurrences
-main_counts = Counter(main_numbers)
-lucky_counts = Counter(lucky_stars)
+# Compute frequency of numbers
+main_freq = Counter(main_numbers)
+lucky_freq = Counter(lucky_stars)
 
-def bayesian_prediction(counter, num_choices, value_range):
-    total = sum(counter.values())
-    probabilities = {k: (v + 1) / (total + len(counter)) for k, v in counter.items()}  # Laplace smoothing
-    
-    numbers = list(probabilities.keys())
-    weights = list(probabilities.values())
-    
-    selected = np.random.choice(numbers, size=num_choices, replace=False, p=weights)
-    return [int(max(value_range[0], min(value_range[1], num))) for num in selected]
+# Convert frequencies to probabilities
+main_probs = {num: count / len(main_numbers) for num, count in main_freq.items()}
+lucky_probs = {num: count / len(lucky_stars) for num, count in lucky_freq.items()}
 
-# Predict using Bayesian Inference
-predicted_main = bayesian_prediction(main_counts, 5, (1, 50))
-predicted_lucky = bayesian_prediction(lucky_counts, 2, (1, 12))
+# Predict next numbers based on highest probabilities
+predicted_main = sorted(main_probs, key=main_probs.get, reverse=True)[:5]
+predicted_lucky = sorted(lucky_probs, key=lucky_probs.get, reverse=True)[:2]
 
-print("Predicted main numbers:", [int(num) for num in predicted_main])
-print("Predicted lucky star numbers:", [int(num) for num in predicted_lucky])
+print("Predicted main numbers:", predicted_main)
+print("Predicted lucky star numbers:", predicted_lucky)
